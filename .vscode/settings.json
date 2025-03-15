@@ -9,19 +9,4 @@
   },
   "eslint.validate": ["typescript"],
   "prettier.requireConfig": true,
-  "importSorter.generalConfiguration.sortOnBeforeSave": true,
-  "importSorter.sortConfiguration.customOrderingRules.rules": [
-    {
-      "regex": "^(?!.*[@./]).*$",
-      "orderLevel": 1
-    },
-    {
-      "regex": "^(?!.*(@\\/|\\.\\/)).*$",
-      "orderLevel": 2
-    },
-    {
-      "regex": "^(?!.*@\/).*$",
-      "orderLevel": 3
-    }
-  ],
 }

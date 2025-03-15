@@ -6,7 +6,10 @@
   "semi": true,
   "bracketSpacing": true,
   "arrowParens": "avoid",
-  "endOfLine": "lf",
+  "importOrder": ["^components/(.*)$", "^[./]" ],
+  "importOrderSeparation": true, 
+  "importOrderSortSpecifiers": true,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "overrides": [
     {
       "files": "*.prisma",

@@ -11,50 +11,53 @@ generator client {
 }
 
 model User {
-  id             Int              @id @default(autoincrement())
-  name           String
-  email          String           @unique
-  passwordHash   String
-  createdAt      DateTime         @default(now())
-  documents      Document[]
-  folders        Folder[]
+  id          Int         @id @default(autoincrement())
+  name        String      @default("")      
+  firebaseUid String      @unique
+  email       String      @unique
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  documents   Document[]
+  folders     Folder[]
 }
 
 model Folder {
-  id                    Int       @id @default(autoincrement())
-  name                  String
-  description           String?
-  searchableContent     String?
-  documents             Document[]
-  creator               User      @relation(fields: [creatorId], references: [id])
-  creatorId             Int
-  createdAt             DateTime  @default(now())
-  isDeleted             Boolean   @default(false)
+  id                Int       @id @default(autoincrement())
+  depth             Int       @default(0)
+  name              String
+  description       String?
+  parentId          Int?
+  parent            Folder?   @relation("FolderToFolder", fields: [parentId], references: [id], onDelete: SetNull)
+  children          Folder[]  @relation("FolderToFolder")
+  documents         Document[]
+  creator           User      @relation(fields: [creatorId], references: [id])
+  creatorId         Int
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  isDeleted         Boolean   @default(false)
+
+  @@index([parentId])
 }
 
 model FileType {
   id          Int        @id @default(autoincrement())
   extension   String     @unique
   mimeType    String
-  iconClass   String?
   documents   Document[]
 }
 
 model Document {
   id                Int      @id @default(autoincrement())
-  filename          String
+  name              String
   folder            Folder?  @relation(fields: [folderId], references: [id])
   folderId          Int?
   fileType          FileType @relation(fields: [fileTypeId], references: [id])
   fileTypeId        Int
-  fileSize          Int
-  fileHash          String?  @unique
-  storagePath       String
+  fileSize          Float
   creator           User     @relation(fields: [creatorId], references: [id])
   creatorId         Int
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
   isDeleted         Boolean  @default(false)
   description       String?
-  searchableContent String?
 }

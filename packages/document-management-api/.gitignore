@@ -1,3 +1,16 @@
 node_modules
+dist
+
 # Keep environment variables out of version control
 .env
+.vscode
+logs
+
+# Elasticsearch logs
+elasticsearch.log
+
+# Prisma logs
+prisma.log
+
+# Coverage
+coverage

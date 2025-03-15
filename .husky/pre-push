@@ -1,4 +1,13 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/bin/sh
+set -e
+. "$(dirname "$0")/_/husky.sh"
 
-npm test
+echo "🔍 Running lint:fix and format before commit..."
+npm run lint:fix
+npm run format
+
+echo "🔍 Checking for remaining lint and format issues..."
+npm run lint:check
+npm run format:check
+
+echo "✅ Pre-push checks passed!"

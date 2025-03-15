@@ -1,4 +1,3 @@
-// src/features/auth/auth.routes.ts
 import express from 'express';
 
 import { AuthController } from './auth.controller';
@@ -6,16 +5,14 @@ import { AuthController } from './auth.controller';
 const router = express.Router();
 const authController = new AuthController();
 
-// POST /api/auth/register
-router.post('/register', (req, res) => authController.register(req, res));
-
-// POST /api/auth/login
-router.post('/login', (req, res) => authController.login(req, res));
-
-// POST /api/auth/logout
-router.post('/logout', (req, res) => authController.logout(req, res));
-
-// GET /api/auth/me
-router.get('/me', (req, res) => authController.getCurrentUser(req, res));
+/**
+ * POST /api/auth/firebase
+ * This route is used to verify the Firebase token and process the user
+ * @param {Request} req - Express request object containing idToken in the body
+ * @param {Response} res - Express response object
+ */
+router.post('/firebase', async (req, res) => {
+  await authController.processFirebaseAuth(req, res);
+});
 
 export default router;

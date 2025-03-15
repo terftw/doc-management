@@ -1,141 +1,76 @@
-import * as argon2 from 'argon2';
+import { UserService } from '@/features/user/user.service';
+import { auth } from '@/shared/plugins/firebase';
+import { HttpStatus } from '@/shared/types/http-status';
+import logger from '@/shared/utils/logger';
 import { Request, Response } from 'express';
 
-import prisma from '../../shared/db/prisma';
-import { AuthenticatedRequest } from '../../shared/types';
-
-// JWT Secret Key (move to environment variables in production)
-const JWT_SECRET = new TextEncoder().encode('your-secret-key');
-
+/**
+ * Authentication controller responsible for Firebase token validation and user management
+ *
+ * This controller handles the authentication flow using Firebase tokens:
+ * - Verifies Firebase ID tokens for validity
+ * - Creates new users in the system database when they don't exist
+ * - Retrieves existing user information when they're already registered
+ */
 export class AuthController {
-  // Register new user
-  async register(req: Request, res: Response) {
+  /**
+   * Creates a new instance of the AuthController
+   * @param {UserService} _userService - Service to handle user-related operations
+   */
+  constructor(private _userService = new UserService()) {}
+
+  /**
+   * Validates a Firebase ID token and creates or retrieves a user
+   *
+   * This method verifies the provided Firebase token, creates a new user
+   * if they don't exist in our database, or returns the existing user record
+   *
+   * @param {Request} req - Express request object containing idToken in the body
+   * @param {Response} res - Express response object
+   *
+   * @returns {Promise<Response>} JSON response with user data or error message
+   *
+   * @throws Will return 400 if idToken is missing
+   * @throws Will return 401 if authentication fails
+   */
+  async processFirebaseAuth(req: Request, res: Response): Promise<Response> {
     try {
-      const { email, password, name } = req.body;
+      let status = HttpStatus.OK;
 
-      // Check if user already exists
-      const existingUser = await prisma.user.findUnique({
-        where: { email },
-      });
-
-      if (existingUser) {
-        return res.status(409).json({ message: 'User already exists' });
+      const { idToken } = req.body;
+      if (!idToken) {
+        return res
+          .status(HttpStatus.BAD_REQUEST)
+          .json({ message: 'Firebase ID token is required' });
       }
 
-      // Hash password
-      const hashedPassword = await argon2.hash(password);
+      // Verify the Firebase token
+      const decodedToken = await auth.verifyIdToken(idToken);
 
-      // Create user
-      const user = await prisma.user.create({
-        data: {
-          email,
-          passwordHash: hashedPassword,
-          name,
-        },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          createdAt: true,
-        },
-      });
+      const uid = decodedToken.uid;
+      const email = decodedToken.email || '';
 
-      // Generate JWT token
-      const token = await this.generateToken(user.id);
+      const userRecord = await auth.getUser(uid);
+      const nameFromFirebase = userRecord.displayName || '';
 
-      return res.status(201).json({
-        user,
-        token,
-      });
-    } catch (error) {
-      console.error('Error registering user:', error);
-      return res.status(500).json({ message: 'Failed to register user' });
-    }
-  }
-
-  // Login user
-  async login(req: Request, res: Response) {
-    try {
-      const { email, password } = req.body;
-
-      // Find user
-      const user = await prisma.user.findUnique({
-        where: { email },
-      });
+      let user = await this._userService.getUserByFirebaseUid(uid);
 
       if (!user) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+        user = await this._userService.createUser(nameFromFirebase, email, uid);
+        status = HttpStatus.CREATED;
       }
 
-      // Verify password
-      const isValidPassword = await argon2.verify(user.password, password);
-
-      if (!isValidPassword) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-
-      // Generate JWT token
-      const token = await this.generateToken(user.id);
-
-      return res.status(200).json({
+      return res.status(status).json({
         user: {
           id: user.id,
           email: user.email,
-          name: user.name,
-        },
-        token,
-      });
-    } catch (error) {
-      console.error('Error logging in user:', error);
-      return res.status(500).json({ message: 'Failed to login' });
-    }
-  }
-
-  // Logout user
-  async logout(req: Request, res: Response) {
-    // In a real implementation, you might invalidate the token
-    // For a simple implementation, client-side token removal is sufficient
-    return res.status(200).json({ message: 'Logged out successfully' });
-  }
-
-  // Get current user
-  async getCurrentUser(req: AuthenticatedRequest, res: Response) {
-    try {
-      const userId = req.user?.id;
-
-      if (!userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
-      }
-
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          createdAt: true,
+          name: nameFromFirebase,
+          createdAt: user.createdAt,
         },
       });
-
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-
-      return res.status(200).json(user);
     } catch (error) {
-      console.error('Error getting current user:', error);
-      return res.status(500).json({ message: 'Failed to get user' });
+      logger.error('Firebase authentication error:', error);
+      return res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Authentication failed' });
     }
-  }
-
-  // Helper method to generate JWT token
-  private async generateToken(userId: string) {
-    const jose = await import('jose');
-    const token = await new jose.SignJWT({ sub: userId })
-      .setProtectedHeader({ alg: 'HS256' })
-      .setIssuedAt()
-      .setExpirationTime('1d')
-      .sign(JWT_SECRET);
-    return token;
   }
 }

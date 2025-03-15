@@ -2,40 +2,56 @@
   "name": "document-management-api",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
+  "nodemon": {
+    "execMap": {
+      "ts": "node --loader ts-node/esm"
+    }
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.js"
+  },
   "scripts": {
     "lint": "eslint \"{src,apps,libs}/**/*.ts\"",
     "lint:fix": "eslint \"{src,apps,libs}/**/*.ts\" --fix",
     "format": "prettier --write \"src/**/*.ts\"",
-    "dev": "cross-env NODE_ENV=development nodemon src/server.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "cross-env NODE_ENV=production node dist/server.js"
+    "dev": "cross-env NODE_ENV=development tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json && tsc-alias",
+    "start": "cross-env NODE_ENV=production tsx ./dist/src/server.js",
+    "seed": "ts-node prisma/seed.js",
+    "test": "jest",
+    "test:unit": "jest --selectProjects unit",
+    "test:rc": "jest --selectProjects route-controller"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@elastic/ecs-winston-format": "^1.5.3",
+    "@elastic/elasticsearch": "^8.17.1",
     "@prisma/client": "^6.5.0",
-    "argon2": "^0.41.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "env-var": "^7.5.0",
     "express": "^4.21.2",
-    "express-validator": "^7.2.1",
-    "express-winston": "^4.2.0",
-    "firebase": "^11.4.0",
     "firebase-admin": "^13.2.0",
     "helmet": "^8.0.0",
-    "jose": "^6.0.10",
-    "multer": "^1.4.5-lts.1",
     "prisma": "^6.5.0",
     "winston": "^3.17.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@types/express": "^5.0.0",
     "@types/node": "^22.13.10",
     "cross-env": "^7.0.3",
-    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.11",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }

@@ -1,5 +1,8 @@
 {
   "recommendations": [    
-    "mike-co.import-sorter"
+    "mike-co.import-sorter",
+    "dbaeumer.vscode-eslint",
+    "ms-vscode.vscode-typescript-next",
+    "esbenp.prettier-vscode",
   ]
 }

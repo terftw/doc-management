@@ -7,26 +7,29 @@
   "scripts": {
     "lint": "eslint \"packages/*/src/**/*.{js,ts,jsx,tsx}\"",
     "lint:fix": "eslint \"packages/*/src/**/*.{js,ts,jsx,tsx}\" --fix",
+    "lint:check": "eslint \"packages/*/src/**/*.{js,ts,jsx,tsx}\" --max-warnings=0",
     "format": "prettier --write \"packages/*/src/**/*.{js,ts,jsx,tsx,json,md}\"",
+    "format:check": "prettier --check \"packages/*/src/**/*.{js,ts,jsx,tsx,json,md}\"",
     "test": "npm run test:frontend && npm run test:backend",
-    "test:frontend": "cd packages/frontend && npm test",
-    "test:backend": "cd packages/backend && npm test"
+    "test:frontend": "cd packages/document-management-client && npm run test",
+    "test:backend": "cd packages/document-management-api && npm run test",
+    "prepare": "husky && husky install"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",
-    "@types/cors": "^2.8.17",
+    "@eslint/js": "^9.22.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@typescript-eslint/eslint-plugin": "^8.26.1",
     "@typescript-eslint/parser": "^8.26.1",
     "eslint": "^9.22.0",
-    "eslint-config-next": "^15.2.2",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.5.0",
+    "husky": "^8.0.0",
     "prettier": "^3.5.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.1"
   }
 }

@@ -1,26 +1,24 @@
-// src/utils/logger.ts
 import winston from 'winston';
 
+/**
+ * Logger
+ *
+ * This is the default logger for the application.
+ */
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
   format: winston.format.combine(
+    winston.format.colorize(),
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    winston.format.errors({ stack: true }),
-    winston.format.splat(),
-    winston.format.json(),
+    winston.format.metadata({ fillExcept: ['message', 'level', 'timestamp', 'service'] }),
+    winston.format.printf(info => {
+      const metadata =
+        info.metadata && Object.keys(info.metadata).length > 0 ? JSON.stringify(info.metadata) : '';
+      return `${info.timestamp} ['${info.service}'] ${info.level}: ${info.message} ${metadata}`;
+    }),
   ),
   defaultMeta: { service: 'document-management-api' },
-  transports: [
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.printf(({ level, message, timestamp, ...meta }) => {
-          const metaString = Object.keys(meta).length && meta.service ? JSON.stringify(meta) : '';
-          return `${timestamp} ${level}: ${message} ${metaString}`;
-        }),
-      ),
-    }),
-  ],
+  transports: [new winston.transports.Console()],
 });
 
 export default logger;

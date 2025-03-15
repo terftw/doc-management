@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
+set -e
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx lint-staged
+echo "🔍 Running tests..."
+npm run test
+
+echo "✅ Pre-commit checks passed!"

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <!-- Subtle gradient background -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8f9fa" />
+      <stop offset="100%" stop-color="#e9ecef" />
+    </linearGradient>
+    
+    <!-- Grid pattern -->
+    <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#dee2e6" stroke-width="0.5" opacity="0.5" />
+    </pattern>
+    
+    <!-- Subtle dot pattern -->
+    <pattern id="dot-pattern" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="1" fill="#adb5bd" opacity="0.4" />
+    </pattern>
+  </defs>
+  
+  <!-- Main background with subtle gradient -->
+  <rect width="100%" height="100%" fill="url(#bg-gradient)" />
+  
+  <!-- Grid overlay -->
+  <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+  
+  <!-- Dot overlay -->
+  <rect width="100%" height="100%" fill="url(#dot-pattern)" />
+  
+  <!-- Accent diagonal line -->
+  <path d="M0,1080 L1920,0" stroke="#6c757d" stroke-width="1" opacity="0.1" />
+  
+  <!-- Abstract corner shape -->
+  <path d="M1920,0 L1920,400 Q1720,380 1600,300 T1400,100 T1200,0 Z" fill="#495057" fill-opacity="0.03" />
+  
+  <!-- Bottom subtle wave -->
+  <path d="M0,980 Q480,950 960,1000 T1920,980 V1080 H0 Z" fill="#495057" fill-opacity="0.05" />
+  
+  <!-- Accent elements -->
+  <circle cx="1800" cy="200" r="80" fill="#0d6efd" fill-opacity="0.03" />
+  <circle cx="1760" cy="240" r="40" fill="#0d6efd" fill-opacity="0.05" />
+  
+  <!-- Subtle left side vertical accent -->
+  <rect x="80" y="0" width="2" height="100%" fill="#0d6efd" fill-opacity="0.05" />
+</svg>
