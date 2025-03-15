@@ -1,0 +1,42 @@
+{
+  "name": "document-management-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint \"{src,apps,libs}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,apps,libs}/**/*.ts\" --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "dev": "cross-env NODE_ENV=development nodemon src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "cross-env NODE_ENV=production node dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "argon2": "^0.41.1",
+    "cors": "^2.8.5",
+    "env-var": "^7.5.0",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "express-winston": "^4.2.0",
+    "firebase": "^11.4.0",
+    "firebase-admin": "^13.2.0",
+    "helmet": "^8.0.0",
+    "jose": "^6.0.10",
+    "multer": "^1.4.5-lts.1",
+    "prisma": "^6.5.0",
+    "winston": "^3.17.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "vistra-assessment",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "eslint \"packages/*/src/**/*.{js,ts,jsx,tsx}\"",
+    "lint:fix": "eslint \"packages/*/src/**/*.{js,ts,jsx,tsx}\" --fix",
+    "format": "prettier --write \"packages/*/src/**/*.{js,ts,jsx,tsx,json,md}\"",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "cd packages/frontend && npm test",
+    "test:backend": "cd packages/backend && npm test"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.0",
+    "@types/cors": "^2.8.17",
+    "@typescript-eslint/eslint-plugin": "^8.26.1",
+    "@typescript-eslint/parser": "^8.26.1",
+    "eslint": "^9.22.0",
+    "eslint-config-next": "^15.2.2",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
+  }
+}
