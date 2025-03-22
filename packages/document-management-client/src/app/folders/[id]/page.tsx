@@ -7,7 +7,6 @@ import SearchBar from '@/components/shared/search-bar';
 import UploadToolbar from '@/components/shared/upload-toolbar';
 import { DEBOUNCE_TIME } from '@/lib/debounce-const';
 import { folderDepth, folderMaxChildren } from '@/models/folder';
-import { FSEntry } from '@/models/fsentry';
 import { useActions, usePageStates, useSearchQuery } from '@/store/folder-fsentries-store';
 import { useFormActions } from '@/store/form-store';
 import { Home } from '@mui/icons-material';
@@ -67,15 +66,6 @@ const FolderPage = () => {
     setSelectedFSEntry(null);
     router.push('/home');
   }, [router, setSelectedFSEntry]);
-
-  useEffect(
-    function intiializeSelectedFSEntry() {
-      if (folder) {
-        setSelectedFSEntry(folder as FSEntry);
-      }
-    },
-    [folder, setSelectedFSEntry],
-  );
 
   useEffect(
     function resetPaginationOnSearch() {
