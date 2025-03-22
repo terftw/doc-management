@@ -10,7 +10,7 @@ const SearchBar = ({ value, onChange }: { value: string; onChange: (_: string) =
   };
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, paddingLeft: 0 }}>
       <TextField
         placeholder="Search"
         variant="outlined"

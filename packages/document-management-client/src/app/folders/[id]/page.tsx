@@ -12,7 +12,7 @@ import { useActions, usePageStates, useSearchQuery } from '@/store/folder-fsentr
 import { useFormActions } from '@/store/form-store';
 import { Home } from '@mui/icons-material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Container, IconButton, Paper, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Paper, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { notFound, useParams, useRouter } from 'next/navigation';
 import React, { useCallback, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
@@ -20,6 +20,8 @@ import { useDebounce } from 'use-debounce';
 const FolderPage = () => {
   const { id } = useParams();
   const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Page states
   const { page, pageSize } = usePageStates();
@@ -83,9 +85,16 @@ const FolderPage = () => {
   );
 
   return (
-    <Container maxWidth={false} sx={{ mt: 4 }}>
-      <Stack spacing={2}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+    <Box
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
+      <Box sx={{ flexShrink: 0 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, mt: 4 }}>
           <IconButton
             onClick={handleGoBack}
             aria-label="back"
@@ -112,7 +121,23 @@ const FolderPage = () => {
           disableFolderCreation={hasReachedCreationLimit}
           folder={folder}
         />
-        <Paper sx={{ width: '100%', mb: 2 }}>
+      </Box>
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflow: 'auto',
+          py: 2,
+          px: isMobile ? 1 : 2,
+        }}
+      >
+        <Paper
+          sx={{
+            width: '100%',
+            mb: 2,
+            p: isMobile ? 1 : 2,
+            height: 'auto',
+          }}
+        >
           <Stack spacing={2}>
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
             <FSEntryTable
@@ -125,9 +150,9 @@ const FolderPage = () => {
             />
           </Stack>
         </Paper>
-      </Stack>
+      </Box>
       <FSEntryActionModals />
-    </Container>
+    </Box>
   );
 };
 

@@ -6,7 +6,7 @@ import { useNotifications } from '@/components/ui/notifications';
 import { Document } from '@/models/document';
 import { useFormActions, useSelectedFSEntry } from '@/store/form-store';
 import { Delete } from '@mui/icons-material';
-import { Button, Divider, Stack, useTheme } from '@mui/material';
+import { Button, Divider, Stack, useMediaQuery, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import React from 'react';
 
@@ -14,6 +14,7 @@ import WarningMessage from './warning-message';
 
 const DeleteDocumentForm = () => {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { addNotification } = useNotifications();
   const { closeDeleteDocumentDialog, setSelectedFSEntry } = useFormActions();
   const selectedFSEntry = useSelectedFSEntry();
@@ -45,7 +46,6 @@ const DeleteDocumentForm = () => {
       });
       return;
     }
-
     deleteDocumentMutation.mutate({
       id: selectedDocumentId,
       folderId,
@@ -55,24 +55,27 @@ const DeleteDocumentForm = () => {
   return (
     <FormLayout
       closeDialog={closeDeleteDocumentDialog}
-      headerIcon={<Delete color="error" fontSize="medium" />}
+      headerIcon={<Delete color="error" fontSize={isMobile ? 'small' : 'medium'} />}
       headerTitle="Delete Document"
     >
       <Box
         sx={{
           width: '100%',
-          padding: theme.spacing(3),
+          padding: isMobile ? theme.spacing(2) : theme.spacing(3),
           paddingBottom: 0,
-          minWidth: 500,
+          minWidth: isMobile ? 'auto' : 500,
         }}
       >
         <WarningMessage documentName={documentName} />
+        <Divider sx={{ mb: theme.spacing(2) }} />
 
-        <Divider sx={{ mb: theme.spacing(3) }} />
-
-        {/* Action Buttons */}
-        <Stack direction="row" spacing={2} justifyContent="flex-end">
-          <Button variant="outlined" onClick={closeDeleteDocumentDialog}>
+        <Stack
+          direction={isMobile ? 'column' : 'row'}
+          spacing={isMobile ? 1 : 2}
+          justifyContent={isMobile ? 'stretch' : 'flex-end'}
+          sx={{ mb: theme.spacing(2) }}
+        >
+          <Button variant="outlined" onClick={closeDeleteDocumentDialog} fullWidth={isMobile}>
             Cancel
           </Button>
           <Button
@@ -81,8 +84,13 @@ const DeleteDocumentForm = () => {
             onClick={onSubmit}
             disabled={deleteDocumentMutation.isPending}
             startIcon={<Delete />}
+            fullWidth={isMobile}
           >
-            {deleteDocumentMutation.isPending ? 'Deleting...' : 'Delete Document'}
+            {deleteDocumentMutation.isPending
+              ? 'Deleting...'
+              : isMobile
+                ? 'Delete'
+                : 'Delete Document'}
           </Button>
         </Stack>
       </Box>

@@ -75,7 +75,12 @@ export const Table = <T,>({
         <MuiTable sx={{ minWidth: 650, tableLayout: 'fixed' }}>
           <TableHead>
             {table.getHeaderGroups().map(headerGroup => (
-              <TableRow key={headerGroup.id}>
+              <TableRow
+                key={headerGroup.id}
+                sx={{
+                  backgroundColor: alpha(theme.palette.primary.main, 0.02),
+                }}
+              >
                 {headerGroup.headers.map(header => (
                   <TableCell
                     key={header.id}
@@ -84,7 +89,6 @@ export const Table = <T,>({
                       fontSize: '0.75rem',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
-                      backgroundColor: alpha(theme.palette.primary.main, 0.04),
                       color: theme.palette.text.secondary,
                       borderBottom: `1px solid ${theme.palette.divider}`,
                       padding: '12px 16px',

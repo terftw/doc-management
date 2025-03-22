@@ -7,11 +7,14 @@ import SearchBar from '@/components/shared/search-bar';
 import UploadToolbar from '@/components/shared/upload-toolbar';
 import { DEBOUNCE_TIME } from '@/lib/debounce-const';
 import { useActions, usePageStates, useSearchQuery } from '@/store/home-fsentries-store';
-import { Container, Paper, Stack } from '@mui/material';
+import { Box, Paper, Stack, useMediaQuery, useTheme } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
 
 const HomePage = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   // Page states
   const { page, pageSize } = usePageStates();
   const searchQuery = useSearchQuery();
@@ -38,25 +41,50 @@ const HomePage = () => {
   const totalItems = fsentriesResponse?.metadata?.totalCount || 0;
 
   return (
-    <Container maxWidth={false} sx={{ mt: 4 }}>
-      <Stack spacing={2}>
+    <Box
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
+      <Box sx={{ flexShrink: 0 }}>
         <UploadToolbar title="Documents" />
-        <Paper sx={{ width: '100%', mb: 2 }}>
+      </Box>
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflow: 'auto',
+          py: 2,
+          px: isMobile ? 1 : 2,
+        }}
+      >
+        <Paper
+          sx={{
+            width: '100%',
+            mb: 2,
+            p: isMobile ? 1 : 2,
+            height: 'auto',
+          }}
+        >
           <Stack spacing={2}>
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
-            <FSEntryTable
-              fsentries={fsentries}
-              totalItems={totalItems}
-              isLoading={isLoading}
-              page={page}
-              pageSize={pageSize}
-              setPaginationModel={setPaginationModel}
-            />
+            <Box sx={{ overflowX: 'auto' }}>
+              <FSEntryTable
+                fsentries={fsentries}
+                totalItems={totalItems}
+                isLoading={isLoading}
+                page={page}
+                pageSize={pageSize}
+                setPaginationModel={setPaginationModel}
+              />
+            </Box>
           </Stack>
         </Paper>
-      </Stack>
+      </Box>
       <FSEntryActionModals />
-    </Container>
+    </Box>
   );
 };
 

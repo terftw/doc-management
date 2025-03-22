@@ -17,9 +17,28 @@ const ContentLayout = ({ children }: { children: React.ReactNode }) => {
   }, [user, loading, router]);
 
   return (
-    <div style={{ background: '#F0F5FA', height: '100vh' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        background: '#F0F5FA',
+        height: '100vh',
+        width: '100vw',
+        overflow: 'hidden',
+      }}
+    >
       <NavBar />
-      {children}
+
+      <div
+        style={{
+          flexGrow: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          padding: '0 0 32px 0',
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 };

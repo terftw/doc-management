@@ -12,13 +12,14 @@ export const TableContent = <T,>({
 }) => {
   const theme = useTheme();
 
-  return table.getRowModel().rows.map(row => (
+  return table.getRowModel().rows.map((row, index) => (
     <TableRow
       key={row.id}
       hover
       onClick={() => handleRowClick && handleRowClick(row.original)}
       sx={{
         cursor: handleRowClick ? 'pointer' : 'default',
+        backgroundColor: index % 2 === 1 ? alpha(theme.palette.primary.main, 0.02) : 'transparent',
         '&:hover': {
           backgroundColor: alpha(theme.palette.primary.main, 0.04),
         },
