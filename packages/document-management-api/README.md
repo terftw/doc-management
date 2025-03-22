@@ -277,3 +277,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 2. The "indexing every initial application bootup" decision is made to speed up development.
    a. In the production environment, we should write a cron-job to do the indexing once everyday
    b. You should not deploy this application and deem it production ready if this is not resolved
+3. In development, shutting down your app may cause an error to appear "terminated with exit code: 2

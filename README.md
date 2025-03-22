@@ -1,6 +1,6 @@
 # Document Management System
 
-A full-stack document management system built with Next.js and Express.js, featuring a modern web interface and robust backend API.
+A full-stack document management system built with Next.js and Express.js, featuring a web interface and backend API.
 
 ## Project Structure
 
