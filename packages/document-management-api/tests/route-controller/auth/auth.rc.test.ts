@@ -1,3 +1,7 @@
+import { Request, Response } from 'express';
+
+import { UserFactory } from 'tests/utils/factories/user/user.factory';
+
 /**
  * AuthController Test Suite
  *
@@ -11,8 +15,6 @@ import { UserService } from '@/features/user/user.service';
 import { auth } from '@/shared/plugins/firebase';
 import { HttpStatus } from '@/shared/types/http-status';
 import logger from '@/shared/utils/logger';
-import { Request, Response } from 'express';
-import { UserFactory } from 'tests/utils/factories/user/user.factory';
 
 describe('Auth API Routes and Controller', () => {
   let authController: AuthController;

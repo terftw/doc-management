@@ -1,5 +1,6 @@
 import DeleteDocumentForm from '@/components/documents/delete-document-form';
 import { screen } from '@testing-library/react';
+import React from 'react';
 
 import { renderWithTheme } from '../../test-utils';
 
